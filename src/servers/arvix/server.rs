@@ -14,5 +14,6 @@ pub fn protocol() -> Protocol {
         .register_tool(SearchPapersTool::tool(), SearchPapersTool::call())
         .register_tool(ListRecordsTool::tool(), ListRecordsTool::call())
         .register_tool(SearchByAuthorTool::tool(), SearchByAuthorTool::call())
+        .register_tool(ExtractPaperTextTool::tool(), ExtractPaperTextTool::call())
         .build()
 }
