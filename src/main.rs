@@ -107,7 +107,6 @@ fn get_server_protocol() -> Result<Protocol> {
         tracing::info!("Starting Replicate server");
         #[cfg(feature = "replicate")]
         return Ok(servers::replicate::server::protocol());
-    } else {
-        anyhow::bail!("No server selected");
     }
+    anyhow::bail!("No server selected");
 }
