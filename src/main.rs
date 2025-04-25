@@ -45,6 +45,8 @@ async fn main() -> Result<()> {
                 .with_max_level(tracing::Level::DEBUG)
                 .init();
 
+            let protocol = get_server_protocol()?;
+
             let mut port = env::var("SERVER_PORT")
                 .ok()
                 .and_then(|p| p.parse::<u16>().ok())
@@ -62,7 +64,7 @@ async fn main() -> Result<()> {
             Server::start(ServerSseTransport::new(
                 "0.0.0.0".to_string(),
                 port,
-                get_server_protocol(),
+                protocol,
             ))
             .await
         }
@@ -73,12 +75,39 @@ async fn main() -> Result<()> {
                 .with_writer(std::io::stderr)
                 .init();
 
-            Server::start(ServerStdioTransport::new(get_server_protocol())).await
+            let protocol = get_server_protocol()?;
+
+            Server::start(ServerStdioTransport::new(protocol)).await
         }
     }
 }
 
-fn get_server_protocol() -> Protocol {
-    #[cfg(feature = "arvix")]
-    return servers::arvix::server::protocol();
+fn get_server_protocol() -> Result<Protocol> {
+    if cfg!(feature = "arvix") {
+        tracing::info!("Starting Arvix server");
+        #[cfg(feature = "arvix")]
+        return Ok(servers::arvix::server::protocol());
+    } else if cfg!(feature = "twitter") {
+        tracing::info!("Starting Twitter server");
+        #[cfg(feature = "twitter")]
+        return Ok(servers::twitter::server::protocol());
+    } else if cfg!(feature = "discord") {
+        tracing::info!("Starting Discord server");
+        #[cfg(feature = "discord")]
+        return Ok(servers::discord::server::protocol());
+    } else if cfg!(feature = "shopify") {
+        tracing::info!("Starting Shopify server");
+        #[cfg(feature = "shopify")]
+        return Ok(servers::shopify::server::protocol());
+    } else if cfg!(feature = "huggingface") {
+        tracing::info!("Starting HuggingFace server");
+        #[cfg(feature = "huggingface")]
+        return Ok(servers::huggingface::server::protocol());
+    } else if cfg!(feature = "replicate") {
+        tracing::info!("Starting Replicate server");
+        #[cfg(feature = "replicate")]
+        return Ok(servers::replicate::server::protocol());
+    } else {
+        anyhow::bail!("No server selected");
+    }
 }

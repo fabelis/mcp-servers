@@ -1,0 +1,41 @@
+name: Server Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test-servers:
+    name: Test Server Features
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      
+      - name: Test Shopify
+        run: cargo test --verbose --features shopify --no-default-features
+      
+      - name: Test Discord
+        run: cargo test --verbose --features discord --no-default-features
+      
+      - name: Test Arvix
+        run: cargo test --verbose --features arvix --no-default-features
+      
+      - name: Test Twitter
+        run: cargo test --verbose --features twitter --no-default-features
+      
+      - name: Test HuggingFace
+        run: cargo test --verbose --features huggingface --no-default-features
+      
+      - name: Test Replicate
+        run: cargo test --verbose --features replicate --no-default-features
