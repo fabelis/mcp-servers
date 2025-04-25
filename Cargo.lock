@@ -301,28 +301,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e16d2d3311acee920a9eb8d33b8cbc1787ce4a264e85f964c2404b969bdcd487"
 
 [[package]]
-name = "arc-mcp-servers"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "dotenv",
- "lazy_static",
- "mcp-core",
- "mcp-core-macros",
- "pdf-extract",
- "reqwest 0.11.27",
- "schemars",
- "serde",
- "serde_json",
- "thiserror 1.0.69",
- "tokio",
- "tracing",
- "tracing-subscriber",
- "url",
-]
-
-[[package]]
 name = "async-trait"
 version = "0.1.88"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1461,6 +1439,28 @@ dependencies = [
  "serde",
  "serde_json",
  "syn",
+]
+
+[[package]]
+name = "mcp-servers"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "dotenv",
+ "lazy_static",
+ "mcp-core",
+ "mcp-core-macros",
+ "pdf-extract",
+ "reqwest 0.11.27",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "url",
 ]
 
 [[package]]

@@ -45,12 +45,23 @@ async fn main() -> Result<()> {
                 .with_max_level(tracing::Level::DEBUG)
                 .init();
 
+            let mut port = env::var("SERVER_PORT")
+                .ok()
+                .and_then(|p| p.parse::<u16>().ok())
+                .unwrap_or(3000);
+
+            // Keep trying ports until we find an available one
+            while std::net::TcpListener::bind(format!("0.0.0.0:{}", port)).is_err() {
+                if port == u16::MAX {
+                    anyhow::bail!("No available ports found");
+                }
+                tracing::warn!("Port {} is already in use, trying {}", port, port + 1);
+                port += 1;
+            }
+
             Server::start(ServerSseTransport::new(
                 "0.0.0.0".to_string(),
-                env::var("SERVER_PORT")
-                    .ok()
-                    .and_then(|p| p.parse::<u16>().ok())
-                    .unwrap_or(3000),
+                port,
                 get_server_protocol(),
             ))
             .await
