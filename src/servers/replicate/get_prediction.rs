@@ -37,12 +37,12 @@ mod tests {
     async fn test_get_prediction_tool() {
         dotenv().ok();
 
-        if std::env::var("REPLICATE_PREDICTION_ID").is_err() {
+        if std::env::var("TEST_REPLICATE_PREDICTION_ID").is_err() {
             println!("Skipping test_get_prediction_tool: No prediction ID available");
             return;
         }
 
-        let prediction_id = std::env::var("REPLICATE_PREDICTION_ID").unwrap();
+        let prediction_id = std::env::var("TEST_REPLICATE_PREDICTION_ID").unwrap();
 
         match get_prediction_tool(prediction_id.to_string()).await {
             Ok(content) => {
