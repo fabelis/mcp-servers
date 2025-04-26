@@ -9,7 +9,7 @@ use tokio::fs::File;
 use tokio::io::AsyncWriteExt;
 use url::Url;
 
-use super::errors::McpArvixError;
+use super::errors::McpArxivError;
 
 #[tool(
     name = "ExtractPaperText",
@@ -19,11 +19,11 @@ use super::errors::McpArvixError;
 pub async fn extract_paper_text_tool(paper_url: String) -> Result<ToolResponseContent> {
     // Extract arXiv ID from URL or use directly
     let arxiv_id = if paper_url.contains("arxiv.org") {
-        let url = Url::parse(&paper_url).map_err(|e| McpArvixError::ApiError(e.to_string()))?;
+        let url = Url::parse(&paper_url).map_err(|e| McpArxivError::ApiError(e.to_string()))?;
         url.path_segments()
-            .ok_or_else(|| McpArvixError::ApiError("Invalid URL".to_string()))?
+            .ok_or_else(|| McpArxivError::ApiError("Invalid URL".to_string()))?
             .last()
-            .ok_or_else(|| McpArvixError::ApiError("No paper ID found".to_string()))?
+            .ok_or_else(|| McpArxivError::ApiError("No paper ID found".to_string()))?
             .to_string()
     } else {
         paper_url
@@ -35,17 +35,17 @@ pub async fn extract_paper_text_tool(paper_url: String) -> Result<ToolResponseCo
     // Create temp directory if it doesn't exist
     let temp_dir = PathBuf::from("temp");
     if !temp_dir.exists() {
-        fs::create_dir(&temp_dir).map_err(|e| McpArvixError::ApiError(e.to_string()))?;
+        fs::create_dir(&temp_dir).map_err(|e| McpArxivError::ApiError(e.to_string()))?;
     }
 
     // Download PDF
     let pdf_path = temp_dir.join(format!("{}.pdf", arxiv_id));
     let response = reqwest::get(&pdf_url)
         .await
-        .map_err(McpArvixError::HttpError)?;
+        .map_err(McpArxivError::HttpError)?;
 
     if !response.status().is_success() {
-        return Err(McpArvixError::ApiError(format!(
+        return Err(McpArxivError::ApiError(format!(
             "Failed to download PDF: {}",
             response.status()
         ))
@@ -54,17 +54,17 @@ pub async fn extract_paper_text_tool(paper_url: String) -> Result<ToolResponseCo
 
     let mut file = File::create(&pdf_path)
         .await
-        .map_err(|e| McpArvixError::ApiError(e.to_string()))?;
-    let content = response.bytes().await.map_err(McpArvixError::HttpError)?;
+        .map_err(|e| McpArxivError::ApiError(e.to_string()))?;
+    let content = response.bytes().await.map_err(McpArxivError::HttpError)?;
     file.write_all(&content)
         .await
-        .map_err(|e| McpArvixError::ApiError(e.to_string()))?;
+        .map_err(|e| McpArxivError::ApiError(e.to_string()))?;
 
     // Extract text
-    let text = extract_text(&pdf_path).map_err(|e| McpArvixError::ApiError(e.to_string()))?;
+    let text = extract_text(&pdf_path).map_err(|e| McpArxivError::ApiError(e.to_string()))?;
 
     // Clean up
-    fs::remove_file(&pdf_path).map_err(|e| McpArvixError::ApiError(e.to_string()))?;
+    fs::remove_file(&pdf_path).map_err(|e| McpArxivError::ApiError(e.to_string()))?;
 
     Ok(tool_text_content!(text))
 }

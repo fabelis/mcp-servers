@@ -1,7 +1,7 @@
 use thiserror::Error;
 
 #[derive(Debug, Error)]
-pub enum McpArvixError {
+pub enum McpArxivError {
     #[error("HTTP request error: {0}")]
     HttpError(#[from] reqwest::Error),
     #[error("API error: {0}")]

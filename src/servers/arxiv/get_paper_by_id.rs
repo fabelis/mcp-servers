@@ -1,4 +1,4 @@
-use super::errors::McpArvixError;
+use super::errors::McpArxivError;
 use anyhow::Result;
 use mcp_core::{tool_text_content, types::ToolResponseContent};
 use mcp_core_macros::tool;
@@ -22,16 +22,16 @@ pub async fn get_paper_by_id_tool(id: String) -> Result<ToolResponseContent> {
         .query(&params)
         .send()
         .await
-        .map_err(McpArvixError::HttpError)?;
+        .map_err(McpArxivError::HttpError)?;
 
     // Check if the response is successful
     if !res.status().is_success() {
-        let error_text = res.text().await.map_err(McpArvixError::HttpError)?;
-        return Err(McpArvixError::ApiError(format!("ArXiv API error: {}", error_text)).into());
+        let error_text = res.text().await.map_err(McpArxivError::HttpError)?;
+        return Err(McpArxivError::ApiError(format!("ArXiv API error: {}", error_text)).into());
     }
 
     // Parse the response
-    let result = res.text().await.map_err(McpArvixError::HttpError)?;
+    let result = res.text().await.map_err(McpArxivError::HttpError)?;
 
     Ok(tool_text_content!(result))
 }

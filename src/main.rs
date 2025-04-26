@@ -5,7 +5,6 @@ use anyhow::Result;
 use clap::{Parser, ValueEnum};
 use dotenv::dotenv;
 use mcp_core::{
-    protocol::Protocol,
     server::Server,
     transport::{ServerSseTransport, ServerStdioTransport},
 };
@@ -17,6 +16,10 @@ struct Cli {
     #[arg(value_enum, default_value_t = TransportType::Stdio)]
     transport: TransportType,
 
+    /// Which server to run
+    #[arg(value_enum, short, long)]
+    server: ServerType,
+
     /// Optional path to .env file
     #[arg(short, long)]
     env_file: Option<String>,
@@ -26,6 +29,16 @@ struct Cli {
 enum TransportType {
     Sse,
     Stdio,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+enum ServerType {
+    Arxiv,
+    Twitter,
+    Discord,
+    Shopify,
+    HuggingFace,
+    Replicate,
 }
 
 #[tokio::main]
@@ -39,13 +52,75 @@ async fn main() -> Result<()> {
         dotenv().ok();
     }
 
+    // Select the server based on the CLI argument
+    let protocol = match cli.server {
+        ServerType::Arxiv => {
+            #[cfg(feature = "arxiv")]
+            {
+                servers::arxiv::server::protocol()
+            }
+            #[cfg(not(feature = "arxiv"))]
+            {
+                anyhow::bail!("arxiv feature is not enabled")
+            }
+        }
+        ServerType::Twitter => {
+            #[cfg(feature = "twitter")]
+            {
+                servers::twitter::server::protocol()
+            }
+            #[cfg(not(feature = "twitter"))]
+            {
+                anyhow::bail!("Twitter feature is not enabled")
+            }
+        }
+        ServerType::Discord => {
+            #[cfg(feature = "discord")]
+            {
+                servers::discord::server::protocol()
+            }
+            #[cfg(not(feature = "discord"))]
+            {
+                anyhow::bail!("Discord feature is not enabled")
+            }
+        }
+        ServerType::Shopify => {
+            #[cfg(feature = "shopify")]
+            {
+                servers::shopify::server::protocol()
+            }
+            #[cfg(not(feature = "shopify"))]
+            {
+                anyhow::bail!("Shopify feature is not enabled")
+            }
+        }
+        ServerType::HuggingFace => {
+            #[cfg(feature = "huggingface")]
+            {
+                servers::huggingface::server::protocol()
+            }
+            #[cfg(not(feature = "huggingface"))]
+            {
+                anyhow::bail!("HuggingFace feature is not enabled")
+            }
+        }
+        ServerType::Replicate => {
+            #[cfg(feature = "replicate")]
+            {
+                servers::replicate::server::protocol()
+            }
+            #[cfg(not(feature = "replicate"))]
+            {
+                anyhow::bail!("Replicate feature is not enabled")
+            }
+        }
+    };
+
     match cli.transport {
         TransportType::Sse => {
             tracing_subscriber::fmt()
                 .with_max_level(tracing::Level::DEBUG)
                 .init();
-
-            let protocol = get_server_protocol()?;
 
             let mut port = env::var("SERVER_PORT")
                 .ok()
@@ -76,38 +151,7 @@ async fn main() -> Result<()> {
                 .with_writer(std::io::stderr)
                 .init();
 
-            let protocol = get_server_protocol()?;
-
             Server::start(ServerStdioTransport::new(protocol)).await
         }
     }
-}
-
-fn get_server_protocol() -> Result<Protocol> {
-    if cfg!(feature = "arvix") {
-        tracing::info!("Starting Arvix server");
-        #[cfg(feature = "arvix")]
-        return Ok(servers::arvix::server::protocol());
-    } else if cfg!(feature = "twitter") {
-        tracing::info!("Starting Twitter server");
-        #[cfg(feature = "twitter")]
-        return Ok(servers::twitter::server::protocol());
-    } else if cfg!(feature = "discord") {
-        tracing::info!("Starting Discord server");
-        #[cfg(feature = "discord")]
-        return Ok(servers::discord::server::protocol());
-    } else if cfg!(feature = "shopify") {
-        tracing::info!("Starting Shopify server");
-        #[cfg(feature = "shopify")]
-        return Ok(servers::shopify::server::protocol());
-    } else if cfg!(feature = "huggingface") {
-        tracing::info!("Starting HuggingFace server");
-        #[cfg(feature = "huggingface")]
-        return Ok(servers::huggingface::server::protocol());
-    } else if cfg!(feature = "replicate") {
-        tracing::info!("Starting Replicate server");
-        #[cfg(feature = "replicate")]
-        return Ok(servers::replicate::server::protocol());
-    }
-    anyhow::bail!("No server selected");
 }

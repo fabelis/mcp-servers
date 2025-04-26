@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [features]
-default = ["replicate"]
-arvix = []
+default = ["shopify", "huggingface", "replicate", "discord", "twitter", "arxiv"]
+arxiv = []
 twitter = ["twitter-v2"]
 discord = ["serenity"]
 shopify = []

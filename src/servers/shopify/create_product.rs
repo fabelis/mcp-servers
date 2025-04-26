@@ -14,7 +14,8 @@ use super::errors::McpShopifyError;
         body_html = "Product description",
         vendor = "Product vendor",
         product_type = "Type of the product",
-        price = "Price of the product"
+        price = "Price of the product",
+        image_url = "URL of the product image"
     )
 )]
 async fn create_product_tool(
@@ -23,6 +24,7 @@ async fn create_product_tool(
     vendor: Option<String>,
     product_type: Option<String>,
     price: Option<String>,
+    image_url: Option<String>,
 ) -> Result<ToolResponseContent> {
     let shop_domain =
         std::env::var("SHOPIFY_SHOP_DOMAIN").map_err(|_| McpShopifyError::MissingShopifyDomain)?;
@@ -32,7 +34,7 @@ async fn create_product_tool(
     let client = Client::new();
     let url = format!("https://{}/admin/api/2022-04/products.json", shop_domain);
 
-    let product_data = json!({
+    let mut product_data = json!({
         "product": {
             "title": title,
             "body_html": body_html,
@@ -43,6 +45,13 @@ async fn create_product_tool(
             }]
         }
     });
+
+    // Add image if provided
+    if let Some(image) = image_url {
+        product_data["product"]["images"] = json!([{
+            "src": image
+        }]);
+    }
 
     let res = client
         .post(&url)
@@ -80,6 +89,7 @@ mod tests {
             Some("Test Vendor".to_string()),
             Some("Test Type".to_string()),
             Some("9.99".to_string()),
+            Some("https://example.com/test-image.jpg".to_string()),
         )
         .await;
 

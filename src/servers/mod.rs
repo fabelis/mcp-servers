@@ -1,5 +1,5 @@
-#[cfg(feature = "arvix")]
-pub mod arvix;
+#[cfg(feature = "arxiv")]
+pub mod arxiv;
 #[cfg(feature = "discord")]
 pub mod discord;
 #[cfg(feature = "huggingface")]
