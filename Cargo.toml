@@ -23,7 +23,7 @@ serenity = { version = "0.12", features = [
 ], optional = true }
 anyhow = "1.0.98"
 async-trait = "0.1.77"
-base64 = "0.22.1"
+base64 = "0.21"
 clap = { version = "4.5.37", features = ["derive"] }
 dotenv = "0.15.0"
 lazy_static = "1.5.0"

@@ -27,12 +27,20 @@ async fn get_prediction_tool(prediction_id: String) -> Result<Vec<ToolResponseCo
         .map_err(McpReplicateError::HttpError)?;
     let json: Value = res.json().await.map_err(McpReplicateError::HttpError)?;
 
+    println!("Prediction response: {:#?}", json);
+
     // Extract the image URL from the output array
-    let image_url = json["output"]
-        .as_array()
-        .and_then(|arr| arr.first())
-        .and_then(|url| url.as_str())
-        .ok_or_else(|| McpReplicateError::InvalidResponse("No image URL found".into()))?;
+    let image_url = if let Some(url_str) = json["output"].as_str() {
+        // Handle case where output is directly a string
+        url_str
+    } else {
+        // Handle case where output is an array of strings
+        json["output"]
+            .as_array()
+            .and_then(|arr| arr.first())
+            .and_then(|url| url.as_str())
+            .ok_or_else(|| McpReplicateError::InvalidResponse("No image URL found".into()))?
+    };
 
     // Extract extension and determine mime type
     let mime_type = Url::parse(image_url)

@@ -20,5 +20,6 @@ pub fn protocol() -> Protocol {
         .register_tool(ListCustomersTool::tool(), ListCustomersTool::call())
         .register_tool(ListProductsTool::tool(), ListProductsTool::call())
         .register_tool(UpdateProductTool::tool(), UpdateProductTool::call())
+        .register_tool(AddProductImageTool::tool(), AddProductImageTool::call())
         .build()
 }

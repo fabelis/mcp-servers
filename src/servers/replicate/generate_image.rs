@@ -12,7 +12,7 @@ use serde_json::Value;
     name = "GenerateImage",
     description = "Generate an image via Replicate by prompting the model.",
     params(
-        model_id = "ID of the model, e.g. 'black-forest-labs/flux-dev-lora'",
+        model_id = "ID of the model, e.g. 'black-forest-labs/flux-1.1-pro-ultra'",
         prompt = "Text prompt for generation",
         lora_weights = "Optional LoRA weights to apply, e.g. 'fofr/flux-80s-cyberpunk'"
     )
@@ -100,7 +100,7 @@ mod tests {
         }
 
         match generate_image_tool(
-            "black-forest-labs/flux-dev-lora".to_string(),
+            "black-forest-labs/flux-1.1-pro-ultra".to_string(),
             "style of 80s cyberpunk, a portrait photo".to_string(),
             Some("fofr/flux-80s-cyberpunk".to_string()),
         )
