@@ -60,6 +60,7 @@ async fn main() -> Result<()> {
                 tracing::warn!("Port {} is already in use, trying {}", port, port + 1);
                 port += 1;
             }
+            tracing::info!("Starting server on port {}", port);
 
             Server::start(ServerSseTransport::new(
                 "0.0.0.0".to_string(),

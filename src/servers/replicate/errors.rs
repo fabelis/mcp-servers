@@ -8,6 +8,8 @@ pub enum McpReplicateError {
     MissingToken,
     #[error("Failed to parse Content: {0}")]
     ContentParseError(String),
+    #[error("Invalid response: {0}")]
+    InvalidResponse(String),
     // #[error("Failed to parse JSON: {0}")]
     // JsonParseError(String),
     // #[error("Failed to parse image: {0}")]

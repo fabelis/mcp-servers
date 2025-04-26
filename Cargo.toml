@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [features]
-default = ["shopify", "discord", "arvix", "twitter", "huggingface", "replicate"]
+default = ["replicate"]
 arvix = []
 twitter = ["twitter-v2"]
 discord = ["serenity"]
@@ -23,11 +23,12 @@ serenity = { version = "0.12", features = [
 ], optional = true }
 anyhow = "1.0.98"
 async-trait = "0.1.77"
+base64 = "0.22.1"
 clap = { version = "4.5.37", features = ["derive"] }
 dotenv = "0.15.0"
 lazy_static = "1.5.0"
-mcp-core = { version = "0.1.44", features = ["sse"] }
-mcp-core-macros = "0.1.21"
+mcp-core = { version = "0.1.46", features = ["sse"] }
+mcp-core-macros = "0.1.22"
 pdf-extract = "0.9.0"
 reqwest = { version = "0.12.15", features = ["json"] }
 schemars = "0.8"
