@@ -9,8 +9,7 @@ A collection of composable MCP servers built in Rust
 Fabelis MCP Servers is a powerful collection of composable servers built in Rust using our [mcp-core]() framework. This project enables you to easily spin up and manage your own local MCP servers, providing seamless integration with various platforms and services.
 
 [![License](https://img.shields.io/badge/License-MIT-blue)](./LICENSE)
-[![Discord](https://img.shields.io/badge/Discord-Join%20Us-blue)](https://discord.gg/your-invite)
-[![GitHub Stars](https://img.shields.io/github/stars/fabelis/mcp-servers)](https://github.com/fabelis/mcp-servers/stargazers)
+[![GitHub Repo stars](https://img.shields.io/github/stars/fabelis/mcp-servers)](https://github.com/fabelis/mcp-servers)
 [![Twitter Follow](https://img.shields.io/twitter/follow/FabelisAI?style=social)](https://x.com/FabelisAI)
 [![Website](https://img.shields.io/badge/Website-fabelis.ai-blue)](https://fabelis.ai/)
 
@@ -18,39 +17,46 @@ Fabelis MCP Servers is a powerful collection of composable servers built in Rust
 
 ## Supported Platforms
 
-<div align="center" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
-
-<div align="center">
-  <img src="assets/server_logos/discord.png" alt="Discord Logo" width="100" />
-  <p><strong>Discord</strong></p>
-</div>
-
-<div align="center">
-  <img src="assets/server_logos/Shopify.com_Symbol_1.png" alt="Shopify Logo" width="100" />
-  <p><strong>Shopify</strong></p>
-</div>
-
-<div align="center">
-  <img src="assets/server_logos/x.png" alt="X (Twitter) Logo" width="100" />
-  <p><strong>X (Twitter)</strong></p>
-</div>
-
-<div align="center">
-  <img src="assets/server_logos/arxiv.png" alt="arXiv Logo" width="100" />
-  <p><strong>arXiv</strong></p>
-</div>
-
-<div align="center">
-  <img src="assets/server_logos/huggingface.png" alt="Hugging Face Logo" width="100" />
-  <p><strong>Hugging Face</strong></p>
-</div>
-
-<div align="center">
-  <img src="assets/server_logos/replicate.png" alt="Replicate Logo" width="100" />
-  <p><strong>Replicate</strong></p>
-</div>
-
-</div>
+<table>
+  <tr>
+    <td align="center">
+      <a href="src/servers/discord">
+        <img src="assets/server_logos/discord.png" width="100" alt="Discord" /><br/>
+        <strong>Discord</strong>
+      </a>
+    </td>
+    <td align="center">
+      <a href="src/servers/shopify">
+        <img src="assets/server_logos/Shopify.com_Symbol_1.png" width="100" alt="Shopify" /><br/>
+        <strong>Shopify</strong>
+      </a>
+    </td>
+    <td align="center">
+      <a href="src/servers/twitter">
+        <img src="assets/server_logos/x.png" width="100" alt="X (Twitter)" /><br/>
+        <strong>X (Twitter)</strong>
+      </a>
+    </td>
+    <td align="center">
+      <a href="src/servers/arxiv">
+        <img src="assets/server_logos/arxiv.png" width="100" alt="arXiv" /><br/>
+        <strong>arXiv</strong>
+      </a>
+    </td>
+    <td align="center">
+      <a href="src/servers/huggingface">
+        <img src="assets/server_logos/huggingface.png" width="100" alt="Hugging Face" /><br/>
+        <strong>Hugging Face</strong>
+      </a>
+    </td>
+    <td align="center">
+      <a href="src/servers/replicate">
+        <img src="assets/server_logos/replicate.png" width="100" alt="Replicate" /><br/>
+        <strong>Replicate</strong>
+      </a>
+    </td>
+  </tr>
+</table>
 
 ## Table of Contents
 
